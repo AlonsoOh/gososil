@@ -137,11 +137,12 @@ void CColorConversionView::OnProblem1Sub1()
 	///////////////////////////////////////////////////////
 
 	// PROBLEM 1.1: ADD YOUR CODE HERE TO REDUCE PIXEL VALUES BY HALF
-	for(r = 0; r < height; r++)
+	for (r = 0; r < height; r++) {
 		for (c = 0; c < width; c++) {
 			mg_lpImage[r * width + c] = (*DibData) / 2;
 			*DibData++;
 		}
+	}
 
 	///////////////////////////////////////////////////////
 
@@ -157,11 +158,13 @@ void CColorConversionView::OnProblem1Sub2()
 	CClientDC pDC(this);
 	
 	CFile file;
-	file.Open("lena_8.bmp", CFile::modeRead);	
+	file.Open("lena_8.bmp", CFile::modeRead);
+
 	if (m_dibFile.Read(&file) != TRUE) {
 		file.Close();
 		return;
 	}
+
 	file.Close();
 
 	LONG width = (m_dibFile.m_lpBMIH)->biWidth;
@@ -177,11 +180,12 @@ void CColorConversionView::OnProblem1Sub2()
 
 	// PROBLEM 1.2:ADD YOUR CODE HERE TO INCREASE PIXEL VALUES TWICE
 	unsigned char* DibData = m_dibFile.m_lpImage;
-	for (r = 0; r < height; r++)
+	for (r = 0; r < height; r++) {
 		for (c = 0; c < width; c++) {
-			mg_lpImage[r * width + c] = ((*DibData) * 2 > 255 ? 255 : (*DibData)*2);
+			mg_lpImage[r * width + c] = ((*DibData) * 2 > 255 ? 255 : (*DibData) * 2);
 			*DibData++;
 		}
+	}
 
 	///////////////////////////////////////////////////////
 
@@ -198,12 +202,13 @@ void CColorConversionView::OnProblem2()
 	
 	CFile file;
 	file.Open("lena_24.bmp", CFile::modeRead);	
+
 	if (m_dibFile.Read(&file) != TRUE) {
 		file.Close();
 		return;
 	}
-	file.Close();
 
+	file.Close();
 	LONG width = (m_dibFile.m_lpBMIH)->biWidth;
 	LONG height = (m_dibFile.m_lpBMIH)->biHeight;
 	WORD bitcount = (m_dibFile.m_lpBMIH)->biBitCount; // color depth, 8, 16, or 24
@@ -225,7 +230,7 @@ void CColorConversionView::OnProblem2()
 	///////////////////////////////////////////////////////
 
 	// PROBLEM 2:ADD YOUR CODE HERE TO CONVERT 24 BIT COLOR TO GRAYSCALE
-	for (int r = 0; r < height; r++)
+	for (int r = 0; r < height; r++) {
 		for (int c = 0; c < width; c++) {
 			float tmp[3];
 			for (int k = 0; k < 3; k++)
@@ -235,13 +240,12 @@ void CColorConversionView::OnProblem2()
 				tmp[0] += tmp[k];
 			mg_lpImage[r * width + c] = (unsigned char)tmp[0];
 		}
+	}
 
 	///////////////////////////////////////////////////////
 
 	QueryPerformanceCounter(&m_end);
 	m_result = 1000*(m_end.QuadPart-m_start.QuadPart)/m_frequency.QuadPart;		
-		
-
 	m_width = width;
 	m_height = height;
 	Invalidate();
@@ -256,12 +260,13 @@ void CColorConversionView::OnProblem3()
 	
 	CFile file;
 	file.Open("image_16.bmp", CFile::modeRead);	
+
 	if (m_dibFile.Read(&file) != TRUE) {
 		file.Close();
 		return;
 	}
-	file.Close();
 
+	file.Close();
 	LONG width = (m_dibFile.m_lpBMIH)->biWidth;
 	LONG height = (m_dibFile.m_lpBMIH)->biHeight;
 	WORD bitcount = (m_dibFile.m_lpBMIH)->biBitCount; // color depth, 8, 16, or 24
@@ -285,21 +290,23 @@ void CColorConversionView::OnProblem3()
 
 	// PROBLEM 3:ADD YOUR CODE HERE TO CONVERT 16 BIT COLOR TO GRAYSCALE
 	unsigned char* Dibdata = m_dibFile.m_lpImage;
-	for (int r = 0; r < height; r++)
+	for (int r = 0; r < height; r++) {
 		for (int c = 0; c < width; c++) {
 			int tmp[3] = { 0,0,0 };
-			int tmppp = (int)* Dibdata++;
-			int tmpp = (int)* Dibdata++; tmpp *= 256;
+			int tmppp = (int)*Dibdata++;
+			int tmpp = (int)*Dibdata++; tmpp *= 256;
 			tmpp += tmppp;
 			int x = tmpp;
+
 			for (int k = 0; k < 3; k++) {
 				tmp[k] |= x % 32;
 				x /= 32;
 			}
+
 			float xx = 0.114f * tmp[0] + 0.587f * tmp[1] + 0.299f * tmp[2];	//bgr
-			
 			mg_lpImage[r * width + c] = (unsigned char)xx * 8;
 		}
+	}
 
 	///////////////////////////////////////////////////////
 
