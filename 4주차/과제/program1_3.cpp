@@ -17,8 +17,7 @@ void program1_3(FILE* fp) {
 
 	while (1) {
 		scanf("%lf %lf", &a0, &b0);
-
-		
+	
 		if (_f(a0) * _f(b0) < 0) break;
 		
 		else printf("please enter proper a0, b0\n");
